@@ -1,0 +1,67 @@
+import os
+import torch
+from io import BytesIO
+from typing import Optional
+from diffusers import AutoPipelineForText2Image
+from PIL import Image
+from threading import Lock
+from dotenv import load_dotenv
+load_dotenv()
+
+token = os.getenv("HUGGING_FACE_HUB_TOKEN")
+
+_pipeline = None
+_lock = Lock()  # simple guard for single-GPU concurrency
+
+def _init_pipeline():
+    global _pipeline
+    if _pipeline is not None:
+        return _pipeline
+
+    # dtype = torch.bfloat16 if torch.cuda.is_available() else torch.float16
+    pipe = AutoPipelineForText2Image.from_pretrained(
+        "./models/flux",
+        use_safetensors=True,
+        # dtype=dtype,
+    )
+
+    pipe.load_lora_weights(
+        "./models/lora",
+        use_peft_backend=True,
+        adapter_name="v1",
+    )
+    pipe.set_adapters(["v1"], adapter_weights=[1.0])
+
+    # ! Commenting because torch is not compatible with Blackwell, yet...
+    # device = "cuda" if torch.cuda.is_available() else "cpu"
+    # pipe.to(device)
+
+
+    # Optional mem helpers:
+    # _pipeline.enable_attention_slicing()
+    # pipe.enable_model_cpu_offload()  # if low VRAM (slower)
+    _pipeline = pipe
+    return _pipeline
+
+def generate_image(prompt: str,
+                   guidance_scale: float = 4.0,
+                   height: int = 768,
+                   width: int = 768,
+                   steps: int = 20) -> Image.Image:
+    pipe = _init_pipeline()
+    # Prevent overlapping forward passes on a single GPU
+    with _lock:
+        image = pipe(
+            prompt=prompt,
+            guidance_scale=guidance_scale,
+            height=height,
+            width=width,
+            num_inference_steps=steps,
+        ).images[0]
+        image.save("pic.png")
+    return image
+
+def image_to_png_bytes(img: Image.Image) -> bytes:
+    buf = BytesIO()
+    img.save(buf, format="PNG")
+    return buf.getvalue()
