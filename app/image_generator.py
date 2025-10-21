@@ -17,29 +17,40 @@ def _init_pipeline():
     global _pipeline
     if _pipeline is not None:
         return _pipeline
+    
+    pipe = None
+    if torch.cuda.is_available():
+        print("CUDA IS RUNNING!!")
+        pipe = AutoPipelineForText2Image.from_pretrained(
+            "./models/flux",
+            use_safetensors=True,
+            dtype=torch.bfloat16,
+            device_map="cuda", 
+        )
 
-    # dtype = torch.bfloat16 if torch.cuda.is_available() else torch.float16
-    pipe = AutoPipelineForText2Image.from_pretrained(
-        "./models/flux",
-        use_safetensors=True,
-        # dtype=dtype,
-    )
+        pipe.load_lora_weights(
+            "./models/lora",
+            use_peft_backend=True,
+            adapter_name="v1",
+        )
+        pipe.to("cuda")
+        pipe.enable_attention_slicing()
+        pipe.enable_model_cpu_offload()
+    else:
+        print("RUNNING ON CPU ONLY")
+        pipe = AutoPipelineForText2Image.from_pretrained(
+            "./models/flux",
+            use_safetensors=True,
+        )
 
-    pipe.load_lora_weights(
-        "./models/lora",
-        use_peft_backend=True,
-        adapter_name="v1",
-    )
-    pipe.set_adapters(["v1"], adapter_weights=[1.0])
+        pipe.load_lora_weights(
+            "./models/lora",
+            use_peft_backend=True,
+            adapter_name="v1",
+        )
 
-    # ! Commenting because torch is not compatible with Blackwell, yet...
-    # device = "cuda" if torch.cuda.is_available() else "cpu"
-    # pipe.to(device)
+    pipe.set_adapters(["v1"], adapter_weights=[1.0])    
 
-
-    # Optional mem helpers:
-    # _pipeline.enable_attention_slicing()
-    # pipe.enable_model_cpu_offload()  # if low VRAM (slower)
     _pipeline = pipe
     return _pipeline
 

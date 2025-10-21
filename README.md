@@ -13,9 +13,18 @@ docker build --no-cache -t image-server:latest .
 docker run --gpus all -it --rm --ipc=host -p 8110:80 -v $HOME/projects/image-server:/root/image-server -v ${PWD}:/app -w /app image-server:latest
 ```
 
-## sample api-call
+### sample api-call
 ```
-$ curl -X POST http://127.0.0.1:8111/generate   -u <some_user>:<some_secret>   -H "Content-Type: application/json"   -d '{"prompt":"cinematic neon street, rain reflections"}'
+$ curl -X POST http://127.0.0.1:8111/generate   -u <some_user>:<some_secret>   -H "Content-Type: application/json"   -d '{"prompt":"cinematic neon street, rain reflections"}' --output image.png
+```
+
+### investigate container
+```
+# look into conatiner
+$ docker exec -it <container_id> bash
+
+# look at logs
+$ docker logs <container_id>
 ```
 
 ### shut down container
