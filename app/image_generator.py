@@ -13,6 +13,11 @@ token = os.getenv("HUGGING_FACE_HUB_TOKEN")
 _pipeline = None
 _lock = Lock()  # simple guard for single-GPU concurrency
 
+print("CUDA:", torch.cuda.is_available(),
+      "Device:", torch.cuda.get_device_name(0) if torch.cuda.is_available() else "-",
+      "CUDA tag:", torch.version.cuda
+)
+
 def _init_pipeline():
     global _pipeline
     if _pipeline is not None:
@@ -34,8 +39,8 @@ def _init_pipeline():
             adapter_name="v1",
         )
         pipe.to("cuda")
-        pipe.enable_attention_slicing()
-        pipe.enable_model_cpu_offload()
+        # pipe.enable_attention_slicing()
+        # pipe.enable_model_cpu_offload()
     else:
         print("RUNNING ON CPU ONLY")
         pipe = AutoPipelineForText2Image.from_pretrained(
