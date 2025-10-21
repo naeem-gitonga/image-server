@@ -28,7 +28,7 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(title="FastAPI Code Runner (uv)", version="0.1.0")
+app = FastAPI(title="Image Server (uv)", version="0.1.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -37,18 +37,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-class RunRequest(BaseModel):
-    code: str = Field(..., description="Python code to execute")
-    stdin: Optional[str] = Field("", description="Optional stdin for the code")
-    timeout_sec: int = Field(2, ge=1, le=30, description="Wall-clock timeout in seconds")
-    mem_limit_mb: int = Field(256, ge=64, le=2048, description="Memory limit in MB")
-
-class RunResponse(BaseModel):
-    stdout: str
-    stderr: str
-    exit_code: int
-    time_ms: int
 
 class GenerateReq(BaseModel):
     prompt: str
