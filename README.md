@@ -13,29 +13,28 @@ cheaper, becasue if I forget to turn this GPU off, I won't rack up a hefty
 bill.
 
 ## start locally (Docker)
-
 ```
 $ docker build -f Dockerfile.dev -t image-server-dev:latest .
 
 $ docker run --gpus all --shm-size=1g --ulimit memlock=-1 --ulimit stack=67108864 -it --rm --ipc=host -p 8110:80 -v ${PWD}/models:/app/models -v ${PWD}/app:/app/app -w /app image-server-dev:latest
 ```
 
-### build
+## build
 ```
 $ docker build --no-cache -t image-server:latest .
 ```
 
-### run
+## run
 ```
 $ docker run --gpus all --shm-size=1g --ulimit memlock=-1 --ulimit stack=67108864 --rm -it -v "$PWD/models:/app/models" -p 8110:80 image-server:latest
 ```
 
-### sample api-call
+## sample api-call
 ```
 $ curl -X POST http://127.0.0.1:8110/generate -u <some_user>:<some_secret> -H "Content-Type: application/json" -d '{"prompt":"cinematic neon street, rain reflections"}' --output image.png
 ```
 
-### investigate container
+## investigate container
 ```
 # look into conatiner
 $ docker exec -it <container_id> bash
@@ -44,7 +43,7 @@ $ docker exec -it <container_id> bash
 $ docker logs <container_id>
 ```
 
-### shut down container
+## shut down container
 ```
 $ ctrl + c # from container running terminal of course
 
@@ -55,7 +54,7 @@ $ docker rm -f <container_id> # if necessary
 $ sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches' # cleanup any background tasks (must do)
 ```
 
-### Gotchas
+## Gotchas
 We should not use `uv` to develop for 2 reasons:
 
 1. Dependence on Nvidia’s custom PyTorch image
