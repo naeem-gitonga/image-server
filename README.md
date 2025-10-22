@@ -12,6 +12,9 @@ of technology sitting on my desktop versus *in the cloud*. It's also a lot
 cheaper, becasue if I forget to turn this GPU off, I won't rack up a hefty 
 bill.
 
+
+The [Github](https://github.com/naeem-gitonga/image-server) repo is a mirror of the [Gitlab](https://gitlab.com/naeemgitonga/image-server) repo where I actually develop.
+
 ## start locally (Docker)
 ```
 $ docker build -f Dockerfile.dev -t image-server-dev:latest .
