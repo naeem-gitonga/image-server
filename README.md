@@ -58,6 +58,7 @@ $ sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches' # cleanup any background tasks 
 ```
 
 ## Gotchas
+
 We should not use `uv` to develop for 2 reasons:
 
 1. Dependence on Nvidia’s custom PyTorch image
@@ -73,3 +74,18 @@ We should not use `uv` to develop for 2 reasons:
     - You can’t easily install the Nvidia-specific PyTorch build into that `.venv` since it depends on system-level libraries and dependencies already preinstalled in the base image.
 
     - This breaks GPU access, because the `.venv`’s packages don’t link correctly to those CUDA libs.
+
+### Get image from host
+
+While SSH'd into your machine run the following:
+```
+$ ifconfig | grep "inet "
+# copy the one that starts with "192."
+```
+
+Open a new terminal session on your local machine (localhost):
+```
+$  scp [username]@[ip-address-from-above]:/path/to/file/ /path/to/destination
+```
+
+You should see your image on your local machine.

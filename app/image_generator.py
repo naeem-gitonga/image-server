@@ -23,7 +23,7 @@ def _init_pipeline():
 
     pipe = None
     if torch.cuda.is_available():
-        print("CUDA IS RUNNING!!")
+        print("\n\n\nCUDA IS RUNNING!!\n\n\n")
         pipe = AutoPipelineForText2Image.from_pretrained(
             "./models/flux",
             use_safetensors=True,
@@ -39,7 +39,7 @@ def _init_pipeline():
         # pipe.enable_attention_slicing()
         # pipe.enable_model_cpu_offload()
     else:
-        print("RUNNING ON CPU ONLY")
+        print("\n\n\nRUNNING ON CPU ONLY\n\n\n")
         pipe = AutoPipelineForText2Image.from_pretrained(
             "./models/flux",
             use_safetensors=True,
