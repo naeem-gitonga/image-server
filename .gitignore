@@ -6,4 +6,4 @@ __pycache__/
 uv.lock
 .env
 models/
-api_call.sh
+misc/

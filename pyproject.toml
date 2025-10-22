@@ -21,10 +21,3 @@ dependencies = [
     "peft>=0.17.1",
     "nvidia-ml-py>=13.580.82",
 ]
-
-[tool.uv]
-# uv-specific settings can go here if needed
-
-[project.scripts]
-# Convenience runner: uv run runserver
-runserver = "app.__main__:main"
