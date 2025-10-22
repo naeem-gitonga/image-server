@@ -19,7 +19,7 @@ The [Github](https://github.com/naeem-gitonga/image-server) repo is a mirror of 
 ```
 $ docker build -f Dockerfile.dev -t image-server-dev:latest .
 
-$ docker run --gpus all --shm-size=1g --ulimit memlock=-1 --ulimit stack=67108864 -it --rm --ipc=host -p 8110:80 -v ${PWD}/models:/app/models -v ${PWD}/app:/app/app -w /app image-server-dev:latest
+$ docker run --privileged --gpus all --shm-size=1g --ulimit memlock=-1 --ulimit stack=67108864 -it --rm --ipc=host -p 8110:80 -v ${PWD}/models:/app/models -v ${PWD}/app:/app/app -w /app image-server-dev:latest
 ```
 
 ## build

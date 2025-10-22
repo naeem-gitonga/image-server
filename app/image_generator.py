@@ -10,6 +10,7 @@ load_dotenv()
 
 _pipeline = None
 _lock = Lock()  # * simple guard for single-GPU concurrency
+image_path = os.getenv("GENERATED_IMAGE_PATH")
 
 print("CUDA:", torch.cuda.is_available(),
       "Device:", torch.cuda.get_device_name(0) if torch.cuda.is_available() else "-",
@@ -73,7 +74,7 @@ def generate_image(
             width=width,
             num_inference_steps=steps,
         ).images[0]
-        image.save("pic.png")
+        image.save(f"{image_path}/picture.png")
     return image
 
 def image_to_png_bytes(img: Image.Image) -> bytes:

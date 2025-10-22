@@ -1,4 +1,6 @@
 
+import gc
+import os
 import torch
 import json, sys, subprocess
 from pathlib import Path
@@ -8,15 +10,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from .auth import maybe_basic_auth
 from dotenv import load_dotenv
-import gc
 from contextlib import asynccontextmanager
 from huggingface_hub import login
-
+from starlette.concurrency import run_in_threadpool
+from fastapi.responses import Response, StreamingResponse
 load_dotenv()
 
-from fastapi.responses import Response, StreamingResponse
-from starlette.concurrency import run_in_threadpool
-
+from .utilities import cleanup_memory as drop_cache, clear_buffer_cache
 from .image_generator import generate_image, image_to_png_bytes
 
 # * added the following so that watchman would keep the token in context
@@ -59,27 +59,16 @@ def gpu_info():
 
 @app.post("/generate", dependencies=[Depends(maybe_basic_auth)])
 async def generate(req: GenerateReq):
-    img = await run_in_threadpool(
-        generate_image, req.prompt, req.guidance_scale, req.height, req.width, req.steps
-    )
-    png = await run_in_threadpool(image_to_png_bytes, img)
-    return Response(content=png, media_type="image/png")
+    try:
+        img = await run_in_threadpool(
+            generate_image, req.prompt, req.guidance_scale, req.height, req.width, req.steps
+        )
+        png = await run_in_threadpool(image_to_png_bytes, img)
+        return Response(content=png, media_type="image/png")
+    finally:
+        gc.collect()
 
 @app.on_event("shutdown")
 def cleanup_memory():
-    print("[CLEANUP] Releasing model + RAM...")
-    try:
-        from app.image_generator import _pipeline
-        _pipeline = None
-    except:
-        pass
-
-    gc.collect()
-
-    try:
-        if torch.cuda.is_available():
-            torch.cuda.empty_cache()
-            torch.cuda.ipc_collect()
-    except:
-        pass
-    print("[CLEANUP] Done!")
+    drop_cache()
+    clear_buffer_cache()
