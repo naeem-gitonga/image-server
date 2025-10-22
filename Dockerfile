@@ -12,4 +12,4 @@ ENV MODEL_DIR=/models
 ENV PORT=80
 EXPOSE 80
 
-CMD ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80", "--workers", "1"]
+CMD ["uv", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80", "--workers", "1"]
