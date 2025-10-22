@@ -12,9 +12,6 @@ of technology sitting on my desktop versus *in the cloud*. It's also a lot
 cheaper, becasue if I forget to turn this GPU off, I won't rack up a hefty 
 bill.
 
-## start locally
-`$ sh start.sh`
-
 ## start locally (Docker)
 
 ```
