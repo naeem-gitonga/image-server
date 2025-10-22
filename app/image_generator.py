@@ -8,10 +8,8 @@ from threading import Lock
 from dotenv import load_dotenv
 load_dotenv()
 
-token = os.getenv("HUGGING_FACE_HUB_TOKEN")
-
 _pipeline = None
-_lock = Lock()  # simple guard for single-GPU concurrency
+_lock = Lock()  # * simple guard for single-GPU concurrency
 
 print("CUDA:", torch.cuda.is_available(),
       "Device:", torch.cuda.get_device_name(0) if torch.cuda.is_available() else "-",
@@ -22,7 +20,7 @@ def _init_pipeline():
     global _pipeline
     if _pipeline is not None:
         return _pipeline
-    
+
     pipe = None
     if torch.cuda.is_available():
         print("CUDA IS RUNNING!!")
@@ -38,7 +36,6 @@ def _init_pipeline():
             use_peft_backend=True,
             adapter_name="v1",
         )
-        # pipe.to("cuda")
         # pipe.enable_attention_slicing()
         # pipe.enable_model_cpu_offload()
     else:
@@ -59,14 +56,16 @@ def _init_pipeline():
     _pipeline = pipe
     return _pipeline
 
-def generate_image(prompt: str,
-                   guidance_scale: float = 4.0,
-                   height: int = 768,
-                   width: int = 768,
-                   steps: int = 20) -> Image.Image:
+def generate_image(
+        prompt: str,
+        guidance_scale: float = 4.0,
+        height: int = 768,
+        width: int = 768,
+        steps: int = 20
+    ) -> Image.Image:
     pipe = _init_pipeline()
-    # Prevent overlapping forward passes on a single GPU
-    with _lock:
+
+    with _lock:       # * Prevent overlapping forward passes on a single GPU
         image = pipe(
             prompt=prompt,
             guidance_scale=guidance_scale,

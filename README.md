@@ -35,15 +35,28 @@ $ docker logs <container_id>
 
 ### shut down container
 ```
-$ ctrl + c
+$ ctrl + c # from container running terminal of course
 
 $ docker ps
 
-$ docker rm -f <container_id>
+$ docker rm -f <container_id> # if necessary
 
-$ sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches' # cleanup any background tasks
+$ sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches' # cleanup any background tasks (must do)
 ```
 
 ### Gotchas
-Torch is being added by `uv` becase there are dependencies on it. But, what it is adding is overriding what the container image already has. 
+We should not use `uv` to develop for 2 reasons:
 
+1. Dependence on Nvidia’s custom PyTorch image
+
+    - You need `nvcr.io/nvidia/pytorch:25.09-py3` because the GB10 GPU is new and only supported through Nvidia’s specialized PyTorch build.
+
+    - Using any other environment (like one built by `uv` or a vanilla Python base image) will be missing the custom CUDA/PyTorch needed to run on GPUs.
+
+2. `uv` creates an isolated virtual environment
+
+    - `uv` automatically builds a `.venv` that’s isolated from the system-level Python in the container.
+
+    - You can’t easily install the Nvidia-specific PyTorch build into that `.venv` since it depends on system-level libraries and dependencies already preinstalled in the base image.
+
+    - This breaks GPU access, because the `.venv`’s packages don’t link correctly to those CUDA libs.
