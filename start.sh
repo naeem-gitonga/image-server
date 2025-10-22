@@ -3,7 +3,7 @@ set -e
 
 APP_IMPORT="app.main:app"
 HOST="0.0.0.0"
-PORT="8111"
+PORT="80"
 WORKERS="1"
 
 # paths to ignore (space separated string instead of array)

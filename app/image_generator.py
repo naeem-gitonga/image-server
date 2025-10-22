@@ -38,7 +38,7 @@ def _init_pipeline():
             use_peft_backend=True,
             adapter_name="v1",
         )
-        pipe.to("cuda")
+        # pipe.to("cuda")
         # pipe.enable_attention_slicing()
         # pipe.enable_model_cpu_offload()
     else:
