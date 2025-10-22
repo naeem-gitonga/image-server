@@ -12,7 +12,8 @@ RUN pip install fastapi uvicorn[standard] \
 COPY . .
 
 ENV MODEL_DIR=/models
+ENV ENV=prod
 ENV PORT=80
 EXPOSE 80
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80", "--workers", "1"]
+CMD ["python", "-m", "app"]
