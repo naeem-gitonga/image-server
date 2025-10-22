@@ -1,3 +1,17 @@
+# Image Server
+Simple Python server that serves does inference using GPU. Used as a demo on my
+NVIDIA DGX Spark (GB10 Grace Blackwell Superchip). I pulled my models from 
+[Hugging Face](https://huggingface.co/) and ran them locally. In theory, I could
+drop in different models at will. 
+
+When using this one GPU, the inference is +96% faster. On CPU inference took 30 
+minutes. Using my GB10 it was done in 55 seconds. This is a true testament as to
+why GPUs are so highly sought after. This isn't the first time
+that I've made ML work faster for someone but it's exciting to have this type
+of technology sitting on my desktop versus *in the cloud*. It's also a lot 
+cheaper, becasue if I forget to turn this GPU off, I won't rack up a hefty 
+bill.
+
 ## start locally
 `$ sh start.sh`
 
