@@ -1,6 +1,6 @@
 # Image Server
-Simple Python server that serves does inference using GPU. Used as a demo on my
-NVIDIA DGX Spark (GB10 Grace Blackwell Superchip). I pulled my models from 
+Simple Python server that serves does inference using a GPU. Used as a demo on 
+my NVIDIA DGX Spark (GB10 Grace Blackwell Superchip). I pulled my models from 
 [Hugging Face](https://huggingface.co/) and ran them locally. In theory, I could
 drop in different models at will. 
 
