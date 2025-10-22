@@ -12,7 +12,7 @@ import gc
 from contextlib import asynccontextmanager
 from huggingface_hub import login
 
-load_dotenv() 
+load_dotenv()
 
 from fastapi.responses import Response, StreamingResponse
 from starlette.concurrency import run_in_threadpool
