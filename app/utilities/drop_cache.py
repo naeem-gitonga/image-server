@@ -23,7 +23,8 @@ def cleanup_memory():
     
     print("[CLEANUP] Done!")
 
-def clear_buffer_cache():
+
+def clear_buffer_cache(): # ? This function is helpful for dev because after shutting down the app I often want my buffer cleared... 
     if env != "prod":
         try:
             subprocess.run(
@@ -32,6 +33,6 @@ def clear_buffer_cache():
                 capture_output=True,
                 text=True
             )
-
+            print('Buffer cleared')
         except subprocess.CalledProcessError as e:
             print(f"Failed to drop caches: {e.stderr}")
