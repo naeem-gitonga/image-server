@@ -15,7 +15,7 @@ bill.
 
 The [Github](https://github.com/naeem-gitonga/image-server) repo is a mirror of the [Gitlab](https://gitlab.com/naeemgitonga/image-server) repo where I actually develop.
 
-## start locally (Docker)
+## local development (Docker)
 ```
 $ docker build -f Dockerfile.dev -t image-server-dev:latest .
 
@@ -56,8 +56,12 @@ $ docker rm -f <container_id> # if necessary
 
 $ sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches' # cleanup any background tasks (must do)
 ```
+## pulling models from hugging face
 
-## Gotchas
+This app uses a `models/` dir that is ignored by git. You should have
+ `models/` locally in the root of this application (on the same level)
+  as `app/`.
+## gotchas
 
 We should not use `uv` to develop for 2 reasons:
 
@@ -75,7 +79,7 @@ We should not use `uv` to develop for 2 reasons:
 
     - This breaks GPU access, because the `.venv`’s packages don’t link correctly to those CUDA libs.
 
-### Get image from host
+### get image from host
 
 While SSH'd into your machine run the following:
 ```
@@ -83,7 +87,8 @@ $ ifconfig | grep "inet "
 # copy the one that starts with "192."
 ```
 
-Open a new terminal session on your local machine (localhost):
+Open a new terminal session on your local machine (localhost), perform
+ a `scp`:
 ```
 $  scp [username]@[ip-address-from-above]:/path/to/file/ /path/to/destination
 ```
