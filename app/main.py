@@ -66,7 +66,7 @@ async def generate(req: GenerateReq):
         png = await run_in_threadpool(image_to_png_bytes, img)
         return Response(content=png, media_type="image/png")
     finally:
-        gc.collect()
+        drop_cache()
 
 @app.on_event("shutdown")
 def cleanup_memory():

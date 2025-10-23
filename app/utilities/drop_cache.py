@@ -7,10 +7,12 @@ env = os.getenv("ENV")
 def cleanup_memory():
     print("[CLEANUP] Releasing model + RAM...")
     try:
-        from app.image_generator import _pipeline
-        _pipeline = None
-    except:
-        pass
+        from app import image_generator
+        if hasattr(image_generator, '_pipeline'):
+            image_generator._pipeline = None  # ? Super important for clearing what the app is holding in memory
+            del image_generator._pipeline
+    except Exception as e:
+        print(f"[CLEANUP] Error clearing pipeline: {e}")
 
     gc.collect()
 
@@ -18,8 +20,8 @@ def cleanup_memory():
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
             torch.cuda.ipc_collect()
-    except:
-        pass
+    except Exception as e:
+        print(f"[CLEANUP] Error clearing CUDA cache: {e}")
     
     print("[CLEANUP] Done!")
 
