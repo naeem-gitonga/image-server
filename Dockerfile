@@ -12,6 +12,7 @@ RUN pip install fastapi uvicorn[standard] \
 COPY . .
 
 ENV MODEL_DIR=/models
+ENV GENERATED_IMAGE_PATH=/app/app
 ENV ENV=prod
 ENV PORT=80
 EXPOSE 80
