@@ -8,6 +8,8 @@ from threading import Lock
 from dotenv import load_dotenv
 load_dotenv()
 
+import time
+
 _pipeline = None
 _lock = Lock()  # * simple guard for single-GPU concurrency
 image_path = os.getenv("GENERATED_IMAGE_PATH")
@@ -64,9 +66,13 @@ def generate_image(
         width: int = 768,
         steps: int = 20
     ) -> Image.Image:
-    pipe = _init_pipeline()
-
     with _lock:       # * Prevent overlapping forward passes on a single GPU
+        start = time.time()
+        pipe = _init_pipeline()
+        init_time = time.time() - start
+        print(f"Init took: {init_time} seconds")
+
+        gen_start = time.time()
         image = pipe(
             prompt=prompt,
             guidance_scale=guidance_scale,
@@ -74,6 +80,8 @@ def generate_image(
             width=width,
             num_inference_steps=steps,
         ).images[0]
+        gen_time = time.time() - gen_start
+        print(f"Generation took: {gen_time} seconds")
         image.save(f"{image_path}/picture.png")
     return image
 
