@@ -59,14 +59,11 @@ def gpu_info():
 
 @app.post("/generate", dependencies=[Depends(maybe_basic_auth)])
 async def generate(req: GenerateReq):
-    try:
-        img = await run_in_threadpool(
-            generate_image, req.prompt, req.guidance_scale, req.height, req.width, req.steps
-        )
-        png = await run_in_threadpool(image_to_png_bytes, img)
-        return Response(content=png, media_type="image/png")
-    finally:
-        drop_cache()
+    img = await run_in_threadpool(
+        generate_image, req.prompt, req.guidance_scale, req.height, req.width, req.steps
+    )
+    png = await run_in_threadpool(image_to_png_bytes, img)
+    return Response(content=png, media_type="image/png")
 
 @app.on_event("shutdown")
 def cleanup_memory():
