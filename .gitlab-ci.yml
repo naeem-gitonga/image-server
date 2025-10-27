@@ -16,8 +16,5 @@ test_code:
     - changes:
         - $PWD/infrastructure/**/*
         - $PWD/backend/cdk/**/*
-      when: never
-  before_script:
-    - uv sync
   script:
     - uv run pytest
