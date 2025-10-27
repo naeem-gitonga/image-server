@@ -6,6 +6,8 @@ stages:
 test_code:
   image: naeemgtng/run-tests:latest
   stage: test
+  variables:
+    UV_LINK_MODE: copy
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       when: never
@@ -13,9 +15,6 @@ test_code:
       changes:
         - app/**/*
         - .gitlab-ci.yml
-    - changes:
-        - $PWD/infrastructure/**/*
-        - $PWD/backend/cdk/**/*
   script:
     - uv sync --all-groups
     - uv run python -m pytest
