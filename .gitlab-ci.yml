@@ -4,7 +4,7 @@ stages:
   - deploy
 
 test_code:
-  image: ubuntu:22.04
+  image: naeemgtng/run-tests:latest
   stage: test
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
@@ -17,8 +17,6 @@ test_code:
         - $PWD/backend/cdk/**/*
       when: never
   before_script:
-    - apt-get update && apt-get install -y curl python3 python3-pip
-    - curl -LsSf https://astral.sh/uv/install.sh | sh
     - uv sync
   script:
     - uv run pytest
