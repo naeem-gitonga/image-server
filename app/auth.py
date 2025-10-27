@@ -1,12 +1,13 @@
 
 import os
+import secrets
+
 from fastapi import Depends, HTTPException
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
-import secrets
 
 security = HTTPBasic()
 
-def maybe_basic_auth(credentials: HTTPBasicCredentials = Depends(security)):
+def basic_auth(credentials: HTTPBasicCredentials = Depends(security)):
     user = os.environ.get("BASIC_AUTH_USER")
     pwd = os.environ.get("BASIC_AUTH_PASS")
     if not user and not pwd:
