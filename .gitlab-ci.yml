@@ -18,4 +18,3 @@ test_code:
   script:
     - uv sync --all-groups
     - uv run python -m pytest
-    - echo 'done'
