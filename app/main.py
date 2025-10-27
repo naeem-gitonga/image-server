@@ -14,6 +14,7 @@ from contextlib import asynccontextmanager
 from huggingface_hub import login
 from starlette.concurrency import run_in_threadpool
 from fastapi.responses import Response, StreamingResponse
+
 load_dotenv()
 
 from .utilities import cleanup_memory as drop_cache, clear_buffer_cache
@@ -26,9 +27,10 @@ async def lifespan(app: FastAPI):
     if token:
         login(token=token)  # authenticate the child process
     yield
+    drop_cache()
+    clear_buffer_cache()
 
-
-app = FastAPI(title="Image Server (uv)", version="0.1.0")
+app = FastAPI(title="Image Server AI", version="0.1.0", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -64,8 +66,3 @@ async def generate(req: GenerateReq):
     )
     png = await run_in_threadpool(image_to_png_bytes, img)
     return Response(content=png, media_type="image/png")
-
-@app.on_event("shutdown")
-def cleanup_memory():
-    drop_cache()
-    clear_buffer_cache()
