@@ -6,6 +6,11 @@ stages:
 test_code:
   image: naeemgtng/run-tests:latest
   stage: test
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - report.xml
   variables:
     UV_LINK_MODE: copy
     CI_DEBUG_TRACE: "true"
@@ -19,7 +24,7 @@ test_code:
         - pytest.ini
   script:
     - uv sync --all-groups
-    - uv run pytest -rA $PWD/app/tests
+    - uv run pytest -rA $PWD/app/tests --junitxml=report.xml
 
 
 
