@@ -18,3 +18,8 @@ test_code:
   script:
     - uv sync --all-groups
     - uv run python -m pytest
+
+build:
+  image: ubuntu:latest
+  script:
+    - echo "building"
