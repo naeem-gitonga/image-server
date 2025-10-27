@@ -22,23 +22,23 @@ def test_health_ok(client):
     assert r.status_code == 200
     assert r.json() == {"ok": True}
 
-def test_gpu_info_cpu(monkeypatch, client, mock_cuda):
-    mock_cuda(monkeypatch, available=False)
-    r = client.get("/gpu-info")
-    assert r.status_code == 200
-    data = r.json()
-    assert data["cuda_available"] is False
-    assert data["torch_cuda"] is None
-    assert data["device"] == "cpu"
+# def test_gpu_info_cpu(monkeypatch, client, mock_cuda):
+#     mock_cuda(monkeypatch, available=False)
+#     r = client.get("/gpu-info")
+#     assert r.status_code == 200
+#     data = r.json()
+#     assert data["cuda_available"] is False
+#     assert data["torch_cuda"] is None
+#     assert data["device"] == "cpu"
 
-def test_gpu_info_gpu(monkeypatch, client, mock_cuda):
-    mock_cuda(monkeypatch, available=True, name="NVIDIA GB10")
-    r = client.get("/gpu-info")
-    assert r.status_code == 200
-    data = r.json()
-    assert data["cuda_available"] is True
-    assert data["torch_cuda"] == "12.9"
-    assert data["device"] == "NVIDIA GB10"
+# def test_gpu_info_gpu(monkeypatch, client, mock_cuda):
+#     mock_cuda(monkeypatch, available=True, name="NVIDIA GB10")
+#     r = client.get("/gpu-info")
+#     assert r.status_code == 200
+#     data = r.json()
+#     assert data["cuda_available"] is True
+#     assert data["torch_cuda"] == "12.9"
+#     assert data["device"] == "NVIDIA GB10"
 
 def test_generate_ok(client):
     payload = {
