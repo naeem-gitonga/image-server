@@ -1,4 +1,3 @@
-"""Mock torch.cuda for testing"""
 import pytest
 import torch
 
