@@ -1,11 +1,12 @@
 import os
-import torch
 from io import BytesIO
-from typing import Optional
-from diffusers import AutoPipelineForText2Image
-from PIL import Image
 from threading import Lock
+
+import torch
+from diffusers import AutoPipelineForText2Image
 from dotenv import load_dotenv
+from PIL import Image
+
 load_dotenv()
 
 import time

@@ -1,24 +1,24 @@
 
-import gc
 import os
-import torch
-import json, sys, subprocess
-from pathlib import Path
-from typing import Optional
-from fastapi import FastAPI, Depends, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, Field
-from .auth import maybe_basic_auth
-from dotenv import load_dotenv
 from contextlib import asynccontextmanager
+
+import torch
+from dotenv import load_dotenv
+from fastapi import Depends, FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import Response
 from huggingface_hub import login
+from pydantic import BaseModel
 from starlette.concurrency import run_in_threadpool
-from fastapi.responses import Response, StreamingResponse
+
+from .auth import basic_auth
 
 load_dotenv()
 
-from .utilities import cleanup_memory as drop_cache, clear_buffer_cache
 from .image_generator import generate_image, image_to_png_bytes
+from .utilities import cleanup_memory as drop_cache
+from .utilities import clear_buffer_cache
+
 
 # * added the following so that watchman would keep the token in context
 @asynccontextmanager
@@ -59,7 +59,7 @@ def gpu_info():
         "device": torch.cuda.get_device_name(0) if torch.cuda.is_available() else "cpu",
     }
 
-@app.post("/generate", dependencies=[Depends(maybe_basic_auth)])
+@app.post("/generate", dependencies=[Depends(basic_auth)])
 async def generate(req: GenerateReq):
     img = await run_in_threadpool(
         generate_image, req.prompt, req.guidance_scale, req.height, req.width, req.steps
