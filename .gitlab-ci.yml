@@ -18,4 +18,4 @@ test_code:
         - $PWD/backend/cdk/**/*
   script:
     - uv sync --all-groups
-    - uv run --group dev python -m pytest
+    - uv run python -m pytest
