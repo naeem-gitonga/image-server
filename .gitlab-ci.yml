@@ -15,12 +15,14 @@ test_code:
       changes:
         - app/**/*
         - .gitlab-ci.yml
+        - pytest.ini
   script:
     - uv sync --all-groups
     - uv run python -m pytest -q
 
 
-build:
-  image: ubuntu:latest
-  script:
-    - echo "building"
+
+# build:
+#   image: ubuntu:latest
+#   script:
+#     - echo "building"
