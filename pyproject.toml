@@ -20,4 +20,6 @@ dependencies = [
     "sentencepiece>=0.2.1",
     "peft>=0.17.1",
     "nvidia-ml-py>=13.580.82",
+    "pytest>=8.4.2",
+    "httpx>=0.28.1",
 ]
