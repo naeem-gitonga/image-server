@@ -17,8 +17,8 @@ test_code:
         - .gitlab-ci.yml
   script:
     - uv sync --all-groups
-    - uv run python -m pytest
-    - echo "pytest exit code: $?"
+    - uv run python -m pytest -q
+
 
 build:
   image: ubuntu:latest
