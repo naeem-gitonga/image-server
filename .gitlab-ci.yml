@@ -11,6 +11,8 @@ test_code:
     reports:
       junit:
         - report.xml
+    paths:
+        - report.xml
   variables:
     UV_LINK_MODE: copy
     CI_DEBUG_TRACE: "true"
