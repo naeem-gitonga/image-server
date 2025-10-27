@@ -18,7 +18,7 @@ test_code:
         - pytest.ini
   script:
     - uv sync --all-groups
-    - uv run python -m pytest -q
+    - uv run python -m pytest -ra app/tests/**/*
 
 
 
