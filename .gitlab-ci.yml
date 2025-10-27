@@ -17,5 +17,4 @@ test_code:
         - $PWD/infrastructure/**/*
         - $PWD/backend/cdk/**/*
   script:
-    - uv sync --all-groups
-    - uv run pytest
+    - pytest
