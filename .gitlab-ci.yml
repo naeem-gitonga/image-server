@@ -12,6 +12,7 @@ test_code:
     - if: '$CI_COMMIT_BRANCH == "staging"'
       changes:
         - app/**/*
+        - .gitlab-ci.yml
     - changes:
         - $PWD/infrastructure/**/*
         - $PWD/backend/cdk/**/*
