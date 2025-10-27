@@ -13,7 +13,6 @@ test_code:
         - report.xml
   variables:
     UV_LINK_MODE: copy
-    CI_DEBUG_TRACE: "true"
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       when: never
