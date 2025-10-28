@@ -4,7 +4,7 @@ stages:
   - deploy
 
 test_code:
-  image: python:3.12
+  image: naeemgtng/run-tests:latest
   stage: test
   artifacts:
     when: always
@@ -24,8 +24,8 @@ test_code:
         - .gitlab-ci.yml
         - pytest.ini
   script:
-    - pip install -r requirements.txt
-    - pytest -rA $PWD/app/tests > pytest_results.txt 2>&1
+    - uv sync --all-groups
+    - uv run pytest -rA $PWD/app/tests >> pytest_results.txt
     - |
       if grep -q "100% passed" pytest_results.txt; then
           # If found, exit with code 0
