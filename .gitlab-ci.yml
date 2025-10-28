@@ -22,8 +22,8 @@ test_code:
         - .gitlab-ci.yml
         - pytest.ini
   script:
-    - uv sync --all-groups
-    - uv run pytest -rA $PWD/app/tests --junitxml=report.xml
+    - pip install -r requirements.txt
+    - pytest -rA $PWD/app/tests --junitxml=report.xml
 
 
 
