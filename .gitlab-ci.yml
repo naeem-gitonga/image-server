@@ -27,7 +27,7 @@ test_code:
         - pyproject.toml
   script:
     - uv sync --all-groups
-    - uv run pytest -rA $PWD/app/tests >> pytest_results.txt
+    - uv run pytest -rA $PWD/app/tests --junitxml=report.xml >> pytest_results.txt
     - |
       if grep -q "100% passed" pytest_results.txt; then
           # If found, exit with code 0
