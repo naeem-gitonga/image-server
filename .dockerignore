@@ -3,6 +3,5 @@
 .gitignore
 README.md
 models/
-pyproject.toml
 misc/
-app/tests/
+__pycache__

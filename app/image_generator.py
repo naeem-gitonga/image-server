@@ -90,3 +90,4 @@ def image_to_png_bytes(img: Image.Image) -> bytes:
     buf = BytesIO()
     img.save(buf, format="PNG")
     return buf.getvalue()
+#

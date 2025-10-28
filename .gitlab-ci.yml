@@ -1,0 +1,45 @@
+stages:
+  - test
+  - build
+  - deploy
+
+test_code:
+  image: naeemgtng/run-tests:latest
+  stage: test
+  artifacts:
+    when: always
+    paths:
+      - pytest_results.txt
+    reports:
+      junit:
+        - report.xml
+  variables:
+    UV_LINK_MODE: copy
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: never
+    - if: '$CI_COMMIT_BRANCH == "staging"'
+      changes:
+        - app/**/*
+        - .gitlab-ci.yml
+        - pytest.ini
+        - pyproject.toml
+  script:
+    - set +e  
+    - uv sync --all-groups
+    - uv run pytest -rA $PWD/app/tests --junitxml=report.xml >> pytest_results.txt
+    - set -e
+    - cat pytest_results.txt
+    - |
+      if grep -q "100%" pytest_results.txt; then
+        exit 0
+      else
+        exit 1
+      fi
+
+
+
+# build:
+#   image: ubuntu:latest
+#   script:
+#     - echo "building"
