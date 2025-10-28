@@ -4,7 +4,7 @@ stages:
   - deploy
 
 test_code:
-  image: naeemgtng/run-tests:latest
+  image: astral/uv:python3.12-bookworm-slim
   stage: test
   artifacts:
     when: always
