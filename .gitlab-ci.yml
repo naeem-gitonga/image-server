@@ -37,9 +37,15 @@ test_code:
         exit 1
       fi
 
-
-
-# build:
-#   image: ubuntu:latest
-#   script:
-#     - echo "building"
+build:
+  image: docker:28.5.1-cli
+  stage: build
+  services:
+    - name: ddocker:28.5.1-dind
+  before_script:
+    - echo "$REGISTRY_PASSWORD" | docker login -u "REGISTRY_USER" --password-stdin
+  script:
+    - docker build --no-cache -t naeemgtng/image-server:$CI_COMMIT_SHORT_SHA .
+    - docker tag naeemgtng/image-server:$CI_COMMIT_SHORT_SHA naeemgtng/image-server:latest
+    - docker push naeemgtng/image-server:$CI_COMMIT_SHORT_SHA
+    - docker push naeemgtng/image-server:latest
