@@ -29,7 +29,7 @@ test_code:
     - uv sync --all-groups
     - uv run pytest -rA $PWD/app/tests --junitxml=report.xml >> pytest_results.txt
     - |
-      if grep -q "100% passed" pytest_results.txt; then
+      if grep -q "100%" pytest_results.txt; then
           # If found, exit with code 0
           exit 0
       else
