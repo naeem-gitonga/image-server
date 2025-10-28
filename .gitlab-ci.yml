@@ -4,7 +4,7 @@ stages:
   - deploy
 
 test_code:
-  image: astral/uv:python3.12-bookworm-slim
+  image: python3:latest
   stage: test
   artifacts:
     when: always
