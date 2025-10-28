@@ -24,6 +24,7 @@ test_code:
         - app/**/*
         - .gitlab-ci.yml
         - pytest.ini
+        - pyproject.toml
   script:
     - uv sync --all-groups
     - uv run pytest -rA $PWD/app/tests >> pytest_results.txt
