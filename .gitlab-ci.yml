@@ -26,18 +26,15 @@ test_code:
         - pytest.ini
         - pyproject.toml
   script:
+    - set +e  
     - uv sync --all-groups
-    - set +e  # ← allow errors without exiting
     - uv run pytest -rA $PWD/app/tests --junitxml=report.xml >> pytest_results.txt
-    - echo "Exit code: $?" >> pytest_results.txt
     - set -e
     - |
       if grep -q "100%" pytest_results.txt; then
-          # If found, exit with code 0
-          exit 0
+        exit 0
       else
-          # If not found, exit with code 1
-          exit 1
+        exit 1
       fi
 
 
