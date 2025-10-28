@@ -8,6 +8,8 @@ test_code:
   stage: test
   artifacts:
     when: always
+    paths:
+      - pytest_results.txt
     reports:
       junit:
         - report.xml
@@ -23,7 +25,15 @@ test_code:
         - pytest.ini
   script:
     - pip install -r requirements.txt
-    - pytest -rA $PWD/app/tests --junitxml=report.xml
+    - pytest -rA $PWD/app/tests > pytest_results.txt 2>&1
+    - |
+      if grep -q "100% passed" pytest_results.txt; then
+          # If found, exit with code 0
+          exit 0
+      else
+          # If not found, exit with code 1
+          exit 1
+      fi
 
 
 
