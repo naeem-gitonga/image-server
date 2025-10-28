@@ -24,6 +24,10 @@ def _init_pipeline():
     global _pipeline
     if _pipeline is not None:
         return _pipeline
+    
+    if os.getenv("SKIP_MODEL_LOADING") == "1":
+        print("⚠️ Skipping model loading (test environment)")
+        return None
 
     pipe = None
     if torch.cuda.is_available():
