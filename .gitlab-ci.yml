@@ -14,7 +14,6 @@ test_code:
       junit:
         - report.xml
   variables:
-    SKIP_MODEL_LOADING: "1"
     UV_LINK_MODE: copy
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
