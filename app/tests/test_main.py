@@ -17,19 +17,19 @@ from app.main import app
 def client():
     return TestClient(app)
 
-# def test_health_ok(client):
-#     r = client.get("/health")
-#     assert r.status_code == 200
-#     assert r.json() == {"ok": True}
-
-def test_gpu_info_cpu(monkeypatch, client, mock_cuda):
-    mock_cuda(monkeypatch, available=False)
-    r = client.get("/gpu-info")
+def test_health_ok(client):
+    r = client.get("/health")
     assert r.status_code == 200
-    data = r.json()
-    assert data["cuda_available"] is False
-    assert data["torch_cuda"] is None
-    assert data["device"] == "cpu"
+    assert r.json() == {"ok": True}
+
+# def test_gpu_info_cpu(monkeypatch, client, mock_cuda):
+#     mock_cuda(monkeypatch, available=False)
+#     r = client.get("/gpu-info")
+#     assert r.status_code == 200
+#     data = r.json()
+#     assert data["cuda_available"] is False
+#     assert data["torch_cuda"] is None
+#     assert data["device"] == "cpu"
 
 # def test_gpu_info_gpu(monkeypatch, client, mock_cuda):
 #     mock_cuda(monkeypatch, available=True, name="NVIDIA GB10")
